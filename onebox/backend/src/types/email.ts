@@ -9,6 +9,6 @@ export interface EmailDoc {
   date?: string
   category?: Category
   notifiedInterested?: boolean
-  // additional metadata
+  
   [key: string]: any
 }
