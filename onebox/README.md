@@ -23,7 +23,9 @@ Onebox is a feature-rich email aggregator inspired by ReachInbox. It syncs multi
 ### Backend
 
 cd backend
+
 npm install
+
 npm run dev
 
 
