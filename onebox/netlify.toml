@@ -14,7 +14,7 @@
   external_node_modules = ["express", "body-parser", "cors", "dotenv", "@elastic/elasticsearch", "imapflow", "winston"]
 
 [build.environment]
-  NODE_VERSION = "18.18.2"
+  NODE_VERSION = "16"
 
 [[redirects]]
   from = "/api/*"
