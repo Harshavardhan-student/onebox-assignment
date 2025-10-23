@@ -1,24 +1,23 @@
 [build]
-  base = "onebox/"
+  base = "onebox"
+  command = "cd backend && npm install && npm run build && cd ../frontend && npm install && npm run build"
   publish = "frontend/dist"
-  command = "cd backend && npm install && cd ../frontend && npm install && npm run build"
 
 [functions]
   directory = "backend/src"
   node_bundler = "esbuild"
 
+[build.environment]
+  NODE_VERSION = "18"
+
 [[redirects]]
   from = "/api/*"
   to = "/.netlify/functions/:splat"
   status = 200
+  force = true
 
 [[redirects]]
   from = "/*"
   to = "/index.html"
   status = 200
-  
-[build.environment]
-  NODE_VERSION = "18"
-  GEMINI_API_KEY = ""
-  SLACK_WEBHOOK_URL = ""
-  WEBHOOK_URL = ""
+  force = true

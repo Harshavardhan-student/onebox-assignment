@@ -35,13 +35,16 @@ import { categorizeEmail } from './services/aiService';
 
 export const app = express();
 
-// Enable CORS for all origins (development). Adjust in production as needed.
+// Enable CORS for all origins in development, specific origin in production
 app.use(cors({
-  origin: process.env.NODE_ENV === 'production' 
-    ? 'https://onebox-assessment1.netlify.app'
-    : 'http://localhost:3000'
+  origin: process.env.NODE_ENV === 'production'
+    ? ['https://onebox-assessment1.netlify.app', 'https://main--onebox-assessment1.netlify.app']
+    : '*',
+  methods: ['GET', 'POST', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization']
 }));
 
+// Parse JSON bodies
 app.use(bodyParser.json());
 
 app.get('/health', (_req, res) => res.json({ ok: true }));

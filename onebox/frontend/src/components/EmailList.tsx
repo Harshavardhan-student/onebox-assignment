@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react'
+import api from '../utils/api'
 
 type Email = {
   id?: string
@@ -10,6 +11,7 @@ type Email = {
   body?: string
   date?: string
   category?: string | null
+  aiCategory?: string | null
 }
 
 export default function EmailList({ searchQuery, onSelect, filters }: { searchQuery?: string, onSelect?: (email: Email) => void, filters?: { folder?: string, account?: string } }) {
@@ -35,10 +37,10 @@ export default function EmailList({ searchQuery, onSelect, filters }: { searchQu
         if (searchQuery) params.set('q', searchQuery)
         if (filters?.folder) params.set('folder', filters.folder)
         if (filters?.account) params.set('account', filters.account)
-        const url = `/api/emails/search?${params.toString()}`
-        const res = await fetch(url, { signal })
-        if (!res.ok) throw new Error(`HTTP ${res.status} ${res.statusText}`)
-        const data = await res.json()
+        const url = `/emails/search?${params.toString()}`
+        const res = await api.get(url, { signal })
+        if (!res.data) throw new Error('No data received')
+        const data = res.data
         // Normalize ES response { total, hits }
         let items: any[] = []
         if (Array.isArray(data)) items = data
@@ -88,13 +90,10 @@ export default function EmailList({ searchQuery, onSelect, filters }: { searchQu
     if (!email || !email.id) return
     setReplyLoading((s) => ({ ...s, [email.id!]: true }))
     try {
-      const res = await fetch(`/api/emails/${encodeURIComponent(email.id)}/suggest-reply`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ body: email.body || '' }),
+      const res = await api.post(`/emails/${encodeURIComponent(email.id)}/suggest-reply`, {
+        body: email.body || ''
       })
-      if (!res.ok) throw new Error(`HTTP ${res.status} ${res.statusText}`)
-      const data = await res.json()
+      const { data } = res
       const reply = data.reply || data?.choices?.[0]?.text || data?.message || ''
       setSuggestedReplies((s) => ({ ...s, [email.id!]: reply }))
       setSelected((prev) => (prev && prev.id === email.id ? { ...prev } : email))
