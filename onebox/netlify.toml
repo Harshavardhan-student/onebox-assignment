@@ -1,15 +1,6 @@
 [build]
   base = "onebox"
-  command = """
-    echo 'Installing backend dependencies...' && \
-    cd backend && npm install --legacy-peer-deps && \
-    echo 'Building backend...' && \
-    npm run build && \
-    echo 'Installing frontend dependencies...' && \
-    cd ../frontend && npm install --legacy-peer-deps && \
-    echo 'Building frontend...' && \
-    npm run build
-  """
+  command = "npm install && cd backend && npm install && npm run build && cd ../frontend && npm install && npm run build"
   publish = "frontend/dist"
   functions = "backend/src"
 
