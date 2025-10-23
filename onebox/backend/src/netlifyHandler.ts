@@ -1,9 +1,16 @@
-import { Handler, HandlerEvent, HandlerContext } from '@netlify/functions';
+import { HandlerEvent, HandlerContext, Handler } from '@netlify/functions';
 import serverless from 'serverless-http';
 import { app } from './server';
 
 // Wrap the Express app with serverless-http
 const serverlessApp = serverless(app);
+
+// Type for serverless-http response
+type ServerlessResponse = {
+  statusCode: number;
+  body: string;
+  headers?: { [key: string]: string };
+};
 
 // Seed initial data if needed
 let seeded = false;
@@ -40,8 +47,12 @@ export const handler: Handler = async (event: HandlerEvent, context: HandlerCont
     }
 
     // Call the serverless handler
-    const result = await serverlessApp(event, context);
-    return result;
+    const result = await serverlessApp(event, context) as ServerlessResponse;
+    return {
+      statusCode: result.statusCode,
+      body: result.body,
+      headers: result.headers || {}
+    };
   } catch (error) {
     console.error('Error in handler:', error);
     return {

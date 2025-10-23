@@ -38,7 +38,7 @@ export const app = express();
 // Enable CORS for all origins in development, specific origin in production
 app.use(cors({
   origin: process.env.NODE_ENV === 'production'
-    ? ['https://onebox-assessment1.netlify.app', 'https://main--onebox-assessment1.netlify.app']
+    ? ['https://onebox-assessment2.netlify.app', 'https://main--onebox-assessment2.netlify.app']
     : '*',
   methods: ['GET', 'POST', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization']

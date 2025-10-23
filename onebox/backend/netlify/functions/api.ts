@@ -9,4 +9,5 @@ app.use(cors());
 app.use(express.json());
 app.use('/api/emails', emailsRouter);
 
-export const handler: Handler = serverless(app);
+const handler = serverless(app);
+export { handler };

@@ -3,9 +3,19 @@
     "target": "ES2020",
     "module": "CommonJS",
     "outDir": "dist",
-    "rootDir": "src",
+    "rootDir": ".",
     "strict": true,
     "esModuleInterop": true,
-    "skipLibCheck": true
-  }
+    "skipLibCheck": true,
+    "baseUrl": ".",
+    "paths": {
+      "*": ["*"],
+      "src/*": ["src/*"]
+    }
+  },
+  "include": [
+    "src/**/*",
+    "netlify/functions/**/*",
+    "validateE2E.ts"
+  ]
 }

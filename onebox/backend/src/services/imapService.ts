@@ -48,14 +48,16 @@ async function connectAccount(acct: AccountConfig) {
   await client.mailboxOpen('INBOX');
   for await (const msg of client.fetch({ since: since.toISOString() }, { envelope: true, source: true, flags: true, internalDate: true })) {
     try {
+      const internalDate = typeof msg.internalDate === 'string' ? new Date(msg.internalDate) : msg.internalDate;
       const doc = {
+        id: `${acct.accountId || acct.user}-${internalDate?.getTime() || Date.now()}`,
         accountId: acct.accountId || acct.user,
         folder: 'INBOX',
         from: msg.envelope?.from?.map((f: any) => f.address).join(', '),
         to: msg.envelope?.to?.map((t: any) => t.address).join(', '),
         subject: msg.envelope?.subject,
         body: msg.source?.toString('utf-8')?.slice(0, 10000),
-        date: msg.internalDate,
+        date: internalDate?.toISOString() || new Date().toISOString(),
         aiCategory: null
       };
       await indexEmail(doc);
@@ -68,18 +70,20 @@ async function connectAccount(acct: AccountConfig) {
   client.on('exists', async () => {
     try {
       // fetch the most recent message
-      const seq = await client.mailboxStatus('INBOX', { uidNext: true });
+      const seq = await client.status('INBOX', { uidNext: true });
       const uid = (seq.uidNext || 0) - 1;
       if (uid > 0) {
         for await (const msg of client.fetch({ uid }, { envelope: true, source: true, internalDate: true })) {
+          const internalDate = typeof msg.internalDate === 'string' ? new Date(msg.internalDate) : msg.internalDate;
           const doc = {
+            id: `${acct.accountId || acct.user}-${internalDate?.getTime() || Date.now()}`,
             accountId: acct.accountId || acct.user,
             folder: 'INBOX',
             from: msg.envelope?.from?.map((f: any) => f.address).join(', '),
             to: msg.envelope?.to?.map((t: any) => t.address).join(', '),
             subject: msg.envelope?.subject,
             body: msg.source?.toString('utf-8')?.slice(0, 10000),
-            date: msg.internalDate,
+            date: internalDate?.toISOString() || new Date().toISOString(),
             aiCategory: null
           };
           await indexEmail(doc);

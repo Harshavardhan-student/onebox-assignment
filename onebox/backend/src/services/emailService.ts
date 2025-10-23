@@ -19,7 +19,7 @@ export function upsertEmail(email: Partial<EmailDoc>): EmailDoc {
     to: email.to || existing.to || '',
     folder: email.folder || existing.folder || 'INBOX',
     account: email.account || existing.account || '',
-    date: email.date || existing.date || new Date(),
+    date: email.date || existing.date || new Date().toISOString(),
     aiCategory: email.aiCategory || existing.aiCategory || null,
     read: email.read ?? existing.read ?? false
   };
