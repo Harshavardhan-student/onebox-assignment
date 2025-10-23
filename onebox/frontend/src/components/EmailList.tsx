@@ -88,7 +88,7 @@ export default function EmailList({ searchQuery, onSelect, filters }: { searchQu
     if (!email || !email.id) return
     setReplyLoading((s) => ({ ...s, [email.id!]: true }))
     try {
-      const res = await fetch(`http://localhost:5000/emails/${encodeURIComponent(email.id)}/suggest-reply`, {
+      const res = await fetch(`/api/emails/${encodeURIComponent(email.id)}/suggest-reply`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ body: email.body || '' }),

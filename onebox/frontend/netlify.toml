@@ -1,0 +1,9 @@
+{
+  "name": "onebox-frontend",
+  "rewrites": [
+    {
+      "source": "/api/:path*",
+      "destination": "/.netlify/functions/:path*"
+    }
+  ]
+}

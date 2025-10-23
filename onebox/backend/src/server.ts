@@ -33,10 +33,14 @@ import { startImapSync } from './services/imapService';
 import { upsertEmail, getAllEmails } from './services/emailService';
 import { categorizeEmail } from './services/aiService';
 
-const app = express();
+export const app = express();
 
 // Enable CORS for all origins (development). Adjust in production as needed.
-app.use(cors());
+app.use(cors({
+  origin: process.env.NODE_ENV === 'production' 
+    ? 'https://onebox-assessment1.netlify.app'
+    : 'http://localhost:3000'
+}));
 
 app.use(bodyParser.json());
 
