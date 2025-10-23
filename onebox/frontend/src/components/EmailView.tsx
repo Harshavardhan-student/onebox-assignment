@@ -26,7 +26,7 @@ export default function EmailView({ email, onSuggest, onUpdate }: { email?: Emai
     setLoading(true)
     setError(null)
     try {
-      const res = await fetch(`http://localhost:5000/emails/${encodeURIComponent(email.id)}/categorize`, {
+      const res = await fetch(`/api/emails/${encodeURIComponent(email.id)}/categorize`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ subject: email.subject, body: email.body, from: email.from, to: email.to, date: email.date }),

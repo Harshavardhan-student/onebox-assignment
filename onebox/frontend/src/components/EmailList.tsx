@@ -35,7 +35,7 @@ export default function EmailList({ searchQuery, onSelect, filters }: { searchQu
         if (searchQuery) params.set('q', searchQuery)
         if (filters?.folder) params.set('folder', filters.folder)
         if (filters?.account) params.set('account', filters.account)
-        const url = `http://localhost:5000/emails/search?${params.toString()}`
+        const url = `/api/emails/search?${params.toString()}`
         const res = await fetch(url, { signal })
         if (!res.ok) throw new Error(`HTTP ${res.status} ${res.statusText}`)
         const data = await res.json()
