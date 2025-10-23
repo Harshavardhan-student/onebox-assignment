@@ -1,7 +1,7 @@
 [build]
   base = "onebox/"
   publish = "frontend/dist"
-  command = "cd frontend && npm install && npm run build"
+  command = "cd backend && npm install && cd ../frontend && npm install && npm run build"
 
 [functions]
   directory = "backend/src"
