@@ -1,7 +1,7 @@
+$netlifyContent = @'
 [build]
   base = "onebox"
   command = """
-    node --version && \
     cd backend && npm install && npm run build && \
     cd ../frontend && npm install && \
     npm run build
@@ -27,3 +27,20 @@
   to = "/index.html"
   status = 200
   force = true
+'@
+
+$backendPackageContent = Get-Content "backend/package.json" | ConvertFrom-Json
+$backendPackageContent.engines = @{
+    node = ">=18.17.0"
+    npm = ">=9.0.0"
+}
+$backendPackageContent | ConvertTo-Json -Depth 10 | Set-Content "backend/package.json"
+
+$frontendPackageContent = Get-Content "frontend/package.json" | ConvertFrom-Json
+$frontendPackageContent.engines = @{
+    node = ">=18.17.0"
+    npm = ">=9.0.0"
+}
+$frontendPackageContent | ConvertTo-Json -Depth 10 | Set-Content "frontend/package.json"
+
+Set-Content "netlify.toml" $netlifyContent
